@@ -5,7 +5,7 @@ import { currentUser } from "@clerk/nextjs";
 
 connectMongoDB();
 
-export const getCurrentUser = async () => {
+export const GetCurrentUser = async () => {
   //if already exists
   try {
     const clerckUser = await currentUser();
