@@ -1,13 +1,15 @@
-import { Button, Flex } from "antd";
+import { UserButton, currentUser } from "@clerk/nextjs";
 
-export default function Home() {
+import { connectMongoDB } from "@/config/db-config";
+import { getCurrentUser } from "@/server-actions/users";
+connectMongoDB();
+
+export default async function Home() {
+  const loggedInUserData = await getCurrentUser();
+
   return (
-    <Flex gap="small" wrap="wrap">
-      <Button type="primary">Primary Button</Button>
-      <Button>Default Button</Button>
-      <Button type="dashed">Dashed Button</Button>
-      <Button type="text">Text Button</Button>
-      <Button type="link">Link Button</Button>
-    </Flex>
+    <div className="p-10">
+      <h1>homepage</h1>
+    </div>
   );
 }
