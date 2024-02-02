@@ -5,6 +5,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import LayoutProvider from "@/providers/layout-provider";
 import ThemeProvider from "@/providers/theme-provider";
+import ReduxProvider from "@/providers/redux-provider";
+import ToasterProvider from "@/providers/toaster-provider";
 
 export const metadata: Metadata = {
   title: "machat app",
@@ -21,7 +23,10 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <ThemeProvider>
-            <LayoutProvider>{children}</LayoutProvider>
+            <ReduxProvider>
+              <ToasterProvider />
+              <LayoutProvider>{children}</LayoutProvider>
+            </ReduxProvider>
           </ThemeProvider>
         </body>
       </html>

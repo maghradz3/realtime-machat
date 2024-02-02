@@ -6,14 +6,18 @@ import { Avatar } from "antd";
 import { useEffect, useState } from "react";
 import CurrentUserInfo from "./current-user-info";
 import { usePathname } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { SetCurrentUser, UserState } from "@/redux/userSlice";
 
 const Header = () => {
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const isPublicRoute =
     pathname.includes("/sign-in") || pathname.includes("/sign-up");
   if (isPublicRoute) return null;
-  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
-
+  const { currentUserData }: UserState = useSelector(
+    (state: any) => state.user
+  );
   const [showCurrentUserInfo, setShowCurrentUserInfo] =
     useState<boolean>(false);
 
@@ -22,9 +26,9 @@ const Header = () => {
       const response = await GetCurrentUser();
       console.log(response);
       if (response.error) throw new Error(response.error);
-      setCurrentUser(response);
+      dispatch(SetCurrentUser(response as UserType));
     } catch (error: any) {
-      error(error.message);
+      return { error: error.message };
     }
   };
 
@@ -37,16 +41,15 @@ const Header = () => {
         <h1 className="text-2xl font-bold text-primary uppercase">MaChat</h1>
       </div>
       <div className="flex gap-5 items-center">
-        <span className="text-sm">{currentUser?.name}</span>
+        <span className="text-sm">{currentUserData?.name}</span>
         <Avatar
           className="cursor-pointer"
-          src={currentUser?.profilePic}
+          src={currentUserData?.profilePic}
           onClick={() => setShowCurrentUserInfo(true)}
         />
       </div>
       {showCurrentUserInfo && (
         <CurrentUserInfo
-          currentUser={currentUser!}
           setShowCurrentUserInfo={setShowCurrentUserInfo}
           showCUrrentUserInfo={showCurrentUserInfo}
         />

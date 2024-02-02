@@ -1,24 +1,33 @@
-import { UserType } from "@/interfaces";
-import { Button, Divider, Drawer } from "antd";
-import Image from "next/image";
-import React, { useState } from "react";
+"use client";
+
+import { Button, Divider, Drawer, Upload, message } from "antd";
+
+import React, { use, useState } from "react";
 import dayjs from "dayjs";
 import { useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { SetCurrentUser, UserState } from "@/redux/userSlice";
+import { uploadImageToFireBaseAndGetUrl } from "@/helpers/image-upload";
+import { UpdateUserProfile } from "@/server-actions/users";
+import toast from "react-hot-toast";
 
 interface CurrentUserInfoProps {
-  currentUser: UserType;
   setShowCurrentUserInfo: React.Dispatch<React.SetStateAction<boolean>>;
   showCUrrentUserInfo: boolean;
 }
 
 const CurrentUserInfo = ({
-  currentUser,
   setShowCurrentUserInfo,
   showCUrrentUserInfo,
 }: CurrentUserInfoProps) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { currentUserData }: UserState = useSelector(
+    (state: any) => state.user
+  );
   const getUserInfo = (key: string, value: string) => {
     return (
       <div className="flex flex-col">
@@ -41,48 +50,89 @@ const CurrentUserInfo = ({
       setLoading(false);
     }
   };
+
+  const onProfilePicUpdate = async () => {
+    try {
+      setLoading(true);
+      const url: string = await uploadImageToFireBaseAndGetUrl(selectedFile!);
+      const response = await UpdateUserProfile(currentUserData?._id!, {
+        profilePic: url,
+      });
+
+      if (response.error) throw new Error(response.error);
+      dispatch(SetCurrentUser(response));
+      toast.success("Profile Picture Updated");
+      setShowCurrentUserInfo(false);
+    } catch (error: any) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+      setSelectedFile(null);
+    }
+  };
+
   return (
     <Drawer
       open={showCUrrentUserInfo}
       onClose={() => setShowCurrentUserInfo(false)}
       title="Profile"
     >
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-5 justify-center items-center">
-          <Image
-            alt="profile-pic"
-            src={currentUser.profilePic}
-            width={28}
-            height={28}
-            className="w-20 h-20 rounded-full"
-          />
-          <span className="text-gray-500 cursor-pointer">
-            Change Profile picture
-          </span>
-        </div>
-        <Divider className="my-1 border-gray-200" />
+      {currentUserData && (
         <div className="flex flex-col gap-5">
-          {getUserInfo("Name", currentUser.name)}
-          {getUserInfo("ID", currentUser._id)}
-          {getUserInfo("Email", currentUser.email)}
-          {getUserInfo("Username", currentUser.userName)}
-          {getUserInfo(
-            "Joined",
-            dayjs(currentUser.createdAt).format("DD/MM/YYYY hh:mm A")
-          )}
+          <div className="flex flex-col gap-5 justify-center items-center">
+            {!selectedFile && (
+              <img
+                alt="profile-pic"
+                src={currentUserData.profilePic}
+                className="w-28 h-28 rounded-full object-cover object-center"
+              />
+            )}
+            <Upload
+              beforeUpload={(file) => {
+                setSelectedFile(file);
+                return false;
+              }}
+              listType={selectedFile ? "picture-circle" : "text"}
+              maxCount={1}
+            >
+              {" "}
+              Change Profile picture
+            </Upload>
+          </div>
+          <Divider className="my-1 border-gray-200" />
+          <div className="flex flex-col gap-5">
+            {getUserInfo("Name", currentUserData.name)}
+            {getUserInfo("ID", currentUserData._id)}
+            {getUserInfo("Email", currentUserData.email)}
+            {getUserInfo("Username", currentUserData.userName)}
+            {getUserInfo(
+              "Joined",
+              dayjs(currentUserData.createdAt).format("DD/MM/YYYY hh:mm A")
+            )}
+          </div>
+          <div className="mt-5 flex flex-col gap-5">
+            <Button
+              className="w-full"
+              danger
+              block
+              loading={loading && !selectedFile}
+              onClick={onProfilePicUpdate}
+              disabled={!selectedFile}
+            >
+              Update Profile Picture
+            </Button>
+            <Button
+              className="w-full"
+              danger
+              block
+              loading={loading}
+              onClick={onLogout}
+            >
+              Sign Out
+            </Button>
+          </div>
         </div>
-        <div className="mt-5">
-          <Button
-            className="w-full"
-            danger
-            block
-            loading={loading}
-            onClick={onLogout}
-          >
-            Sign Out
-          </Button>
-        </div>
-      </div>
+      )}
     </Drawer>
   );
 };

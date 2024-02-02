@@ -37,3 +37,14 @@ export const GetCurrentUser = async () => {
     };
   }
 };
+
+export const UpdateUserProfile = async (userId: string, payload: any) => {
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, payload, {
+      new: true,
+    });
+    return JSON.parse(JSON.stringify(updatedUser));
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
