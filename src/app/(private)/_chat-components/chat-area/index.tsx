@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { ChatState } from "@/redux/chatSlice";
 import Image from "next/image";
 import chatLogo from "../../../../../public/chatlogo2.png";
+import Messages from "./messages";
+import NewMessage from "./new-message";
 
 function ChatArea() {
   const { selectedChat }: ChatState = useSelector((state: any) => state.chat);
@@ -13,6 +15,7 @@ function ChatArea() {
     return (
       <div className=" flex  flex-1 flex-col justify-center items-center gap-10 h-full">
         <Image
+          priority
           className="w-56 h-56"
           src={chatLogo}
           alt="chat logo"
@@ -26,8 +29,10 @@ function ChatArea() {
     );
   }
   return (
-    <div className="flex-1 ">
+    <div className="flex-1 flex flex-col justify-between ">
       <Recipient />
+      <Messages />
+      <NewMessage />
     </div>
   );
 }

@@ -19,12 +19,12 @@ const messageSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    readBy:{
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "users",
-        },
-    }
-  
+    readBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "users",
+    },
+  },
+
   { timestamps: true }
 );
 

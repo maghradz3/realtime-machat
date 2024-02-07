@@ -6,7 +6,7 @@ import { connectMongoDB } from "@/config/db-config";
 connectMongoDB();
 export default async function Home() {
   return (
-    <div className="flex h-[85vh]">
+    <div className="flex h-[88vh]">
       <Chats />
       <Divider type="vertical" className="h-full border-gray-300 px-0 mx-0" />
       <ChatArea />
