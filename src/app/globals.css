@@ -29,3 +29,13 @@ body {
 .cl-signUp-start {
     width: 100%;
 }
+
+
+input {
+    border: 1px solid #e2e2e2 !important;
+    height: 45px;
+}
+
+textarea {
+    min-height: 100px;
+}

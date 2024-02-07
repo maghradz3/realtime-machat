@@ -30,9 +30,38 @@ export const getAllChats = async (userId: string) => {
       })
       .populate("users")
       .populate("lastMessage")
+      .populate("createdBy")
       .populate({ path: "lastMessage", populate: { path: "sender" } })
       .sort({ updatedAt: -1 });
     return JSON.parse(JSON.stringify(users));
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export const getChatById = async (chatId: string) => {
+  try {
+    const chat = await chatModel
+      .findById(chatId)
+      .populate("users")
+      .populate("lastMessage")
+      .populate("createdBy")
+      .populate({ path: "lastMessage", populate: { path: "sender" } });
+    return JSON.parse(JSON.stringify(chat));
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export const updateChat = async ({
+  chatId,
+  payload,
+}: {
+  chatId: string;
+  payload: any;
+}) => {
+  try {
+    await chatModel.findByIdAndUpdate({ _id: chatId }, payload);
   } catch (error: any) {
     return { error: error.message };
   }
