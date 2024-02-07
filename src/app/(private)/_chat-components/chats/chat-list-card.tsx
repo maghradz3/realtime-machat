@@ -1,4 +1,5 @@
 import ChatSkeleton from "@/components/skeletons/chatSkeleton";
+import { formatDateTime } from "@/helpers/date-formats";
 import { ChatType } from "@/interfaces";
 import { ChatState, SetSelectedChat } from "@/redux/chatSlice";
 import { UserState } from "@/redux/userSlice";
@@ -19,7 +20,7 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
   let chatImage = "";
 
   //about messages
-  let lastMessag = "";
+  let lastMessage = "";
   let lastMessageSenderName = "";
   let lastMessageTime = "";
 
@@ -34,12 +35,34 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
     chatImage = recipient?.profilePic!;
   }
 
+  if (chat?.lastMessage) {
+    lastMessage = chat.lastMessage.text;
+    lastMessageSenderName =
+      chat.lastMessage.sender?._id === currentUserData?._id
+        ? "You"
+        : chat.lastMessage.sender?.name.split(" ")[0];
+    lastMessageTime = formatDateTime(chat.lastMessage.createdAt)!;
+  }
+
   const isSelected = selectedChat?._id === chat._id;
+
+  const unreadCounts = () => {
+    if (!chat?.unreadCounts || !chat?.unreadCounts[currentUserData?._id!]) {
+      return null;
+    }
+    return (
+      <div>
+        <span className="bg-green-700 text-white h-5 w-5 rounded-full flex justify-center items-center">
+          {chat.unreadCounts[currentUserData?._id]}
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div
-      className={`flex justify-between hover:bg-gray-100 transition-all duration-300 easy-in-out cursor-pointer  py-3 px-2 rounded ${
-        isSelected && "bg-gray-100  border border-gray-300 border-solid"
+      className={`flex  justify-between  hover:bg-gray-100 transition-all duration-300 easy-in-out cursor-pointer  py-3 px-2 rounded ${
+        isSelected ? "bg-gray-100  border border-gray-300 border-solid" : ""
       }`}
       onClick={() => dispatch(SetSelectedChat(chat))}
     >
@@ -49,10 +72,16 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
           alt="chatImage"
           className="w-10 h-10 rounded-full"
         />
-        <span className="text-gray-700 text-sm">{chatName}</span>
-        <div>
-          <span>{lastMessageTime}</span>
+        <div className="flex flex-col gap-1">
+          <span className="text-gray-700 text-sm">{chatName}</span>
+          <span className="text-xs text-gray-500">
+            {lastMessageSenderName}: {lastMessage}
+          </span>
         </div>
+      </div>
+      <div className=" ">
+        {unreadCounts()}
+        <span className="text-xs getxt-gray-500">{lastMessageTime}</span>
       </div>
     </div>
   );

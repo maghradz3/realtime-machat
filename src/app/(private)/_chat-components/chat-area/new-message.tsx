@@ -16,6 +16,7 @@ const NewMessage = () => {
   };
   console.log(text);
   const onSend = async () => {
+    if (!text) return;
     try {
       const dbPayload = {
         text,
@@ -36,7 +37,11 @@ const NewMessage = () => {
       <div>Emoji</div>
       <div className="flex-1">
         <Input
+          value={text}
           onChange={onFormChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") onSend();
+          }}
           type="text"
           placeholder="Type a text.."
           className="h-14 px-3"

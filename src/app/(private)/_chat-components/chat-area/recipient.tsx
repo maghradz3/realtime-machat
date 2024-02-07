@@ -24,7 +24,7 @@ function Recipient() {
         <img
           src={chatImage}
           alt="chat image "
-          className="w-10 h-10 rounded-full"
+          className="w-10 h-10 rounded-full object-cover object-center"
         />
         <span className="text-gray-700 text-sm">{chatName}</span>
       </div>

@@ -24,7 +24,7 @@ const ChatsList = () => {
       if (response.error) throw new Error(response.error);
       dispatch(SetChats(response));
     } catch (error: any) {
-      error(error.message);
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
