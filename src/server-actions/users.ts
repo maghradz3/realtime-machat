@@ -48,3 +48,12 @@ export const UpdateUserProfile = async (userId: string, payload: any) => {
     return { error: error.message };
   }
 };
+
+export const GetAllUsers = async () => {
+  try {
+    const users = await UserModel.find({});
+    return JSON.parse(JSON.stringify(users));
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
