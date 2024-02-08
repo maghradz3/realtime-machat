@@ -26,7 +26,7 @@ function Messages() {
       setLoading(true);
       const response = await GetChatMessages(selectedChat?._id!);
       if (response.error) throw new Error(response.error);
-      console.log("response", response);
+
       setMessages(response);
     } catch (error: any) {
       error(error.message);
@@ -67,13 +67,6 @@ function Messages() {
     });
   }, [selectedChat]);
 
-  interface UnreadCounts {
-    [key: string]: number;
-  }
-  interface ChatType {
-    unreadCounts: UnreadCounts;
-  }
-
   React.useEffect(() => {
     if (messagesDIvRef.current) {
       messagesDIvRef.current.scrollTop = messagesDIvRef.current.scrollHeight;
@@ -98,7 +91,7 @@ function Messages() {
     <div className="flex-1 p-3 overflow-y-scroll " ref={messagesDIvRef}>
       <div className="flex flex-col gap-3">
         {messages.map((message) => {
-          return <Message key={message._id} message={message} />;
+          return <Message key={message?._id} message={message} />;
         })}
       </div>
     </div>

@@ -11,6 +11,7 @@ import NewMessage from "./new-message";
 function ChatArea() {
   const { selectedChat }: ChatState = useSelector((state: any) => state.chat);
 
+  console.log(selectedChat);
   if (!selectedChat) {
     return (
       <div className=" flex  flex-1 flex-col justify-center items-center gap-10 h-full">
@@ -28,6 +29,7 @@ function ChatArea() {
       </div>
     );
   }
+
   return (
     <div className="flex-1 flex flex-col justify-between ">
       <Recipient />

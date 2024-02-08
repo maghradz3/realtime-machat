@@ -86,11 +86,11 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
         <img
           src={chatImage}
           alt="chatImage"
-          className="w-10 h-10 rounded-full"
+          className="w-7 h-7 lg:w-10 lg:h-10 rounded-full"
         />
 
         <div className="flex flex-col gap-1">
-          <span className="text-gray-700 text-sm relative flex gap-2 items-center">
+          <span className="text-gray-700 text-xs  lg:text-sm relative flex gap-2 items-center">
             {chatName}
             {onlineIndicator()}
           </span>

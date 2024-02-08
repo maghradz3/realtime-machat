@@ -12,6 +12,7 @@ import { uploadImageToFireBaseAndGetUrl } from "@/helpers/image-upload";
 import { UpdateUserProfile } from "@/server-actions/users";
 import toast from "react-hot-toast";
 import socket from "@/config/socket-config";
+import { SetSelectedChat } from "@/redux/chatSlice";
 
 interface CurrentUserInfoProps {
   setShowCurrentUserInfo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,7 +45,8 @@ const CurrentUserInfo = ({
       socket.emit("logout", currentUserData?._id);
       await signOut();
       setShowCurrentUserInfo(false);
-
+      SetCurrentUser(null);
+      SetSelectedChat(null);
       router.push("/sign-in");
     } catch (error: any) {
       error(error.message);

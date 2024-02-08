@@ -72,7 +72,7 @@ const GroupForm = ({
     }
   };
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid gird-cols-1 md:grid-cols-2">
       <div className="flex flex-col gap-5">
         <span className="text-gray-500 text-sm">
           Select users to add to group

@@ -2,13 +2,14 @@
 
 import { UserType } from "@/interfaces";
 import { GetCurrentUser } from "@/server-actions/users";
-import { Avatar } from "antd";
+import { Avatar, Button } from "antd";
 import { use, useEffect, useState } from "react";
 import CurrentUserInfo from "./current-user-info";
 import { usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { SetCurrentUser, SetOnlineUsers, UserState } from "@/redux/userSlice";
 import socket from "@/config/socket-config";
+import ChatDrawer from "@/app/(private)/_chat-components/chats/chat-drawer";
 
 const Header = () => {
   const pathname = usePathname();
@@ -47,13 +48,18 @@ const Header = () => {
     }
   }, [currentUserData]);
   return (
-    currentUserData && (
-      <div className="bg-gray-200 w-full py-2 px-10 flex justify-between items-center border-b border-solid border-gray-300">
+    <>
+      <div className="bg-gray-200 w-full py-2 px-2 md:p-10 flex justify-between items-center border-b border-solid border-gray-300">
         <div>
-          <h1 className="text-2xl font-bold text-primary uppercase">MaChat</h1>
+          <h1 className="text-sm md:text-2xl font-bold text-primary uppercase">
+            MaChat
+          </h1>
         </div>
-        <div className="flex gap-5 items-center">
-          <span className="text-sm">{currentUserData?.name}</span>
+        <div className="md:hidden">
+          <ChatDrawer />
+        </div>
+        <div className="flex gap-1 md:gap-5 items-center">
+          <span className="text-sm">{currentUserData?.name.split(" ")[0]}</span>
           <Avatar
             className="cursor-pointer"
             src={currentUserData?.profilePic}
@@ -68,7 +74,7 @@ const Header = () => {
           />
         )}
       </div>
-    )
+    </>
   );
 };
 
