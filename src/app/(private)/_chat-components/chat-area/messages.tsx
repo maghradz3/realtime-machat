@@ -3,10 +3,11 @@ import { MessageType } from "@/interfaces";
 import { ChatState } from "@/redux/chatSlice";
 import { GetChatMessages, ReadAllMessages } from "@/server-actions/messages";
 
-import React from "react";
+import React, { use } from "react";
 import { useSelector } from "react-redux";
 import Message from "./message";
 import { UserState } from "@/redux/userSlice";
+import socket from "@/config/socket-config";
 
 function Messages() {
   const [messages, setMessages] = React.useState<MessageType[]>([]);
@@ -34,6 +35,20 @@ function Messages() {
     ReadAllMessages({
       userId: currentUserData?._id!,
       chatId: selectedChat?._id!,
+    });
+  }, [selectedChat]);
+
+  React.useEffect(() => {
+    socket.on("new-message-recieved", (message: MessageType) => {
+      if (selectedChat?._id === message.chat._id) {
+        setMessages((prev) => {
+          const isMessageAlreadyExists = prev.find(
+            (msg) => msg.socketMessageId === message.socketMessageId
+          );
+          if (isMessageAlreadyExists) return prev;
+          else return [...prev, message];
+        });
+      }
     });
   }, [selectedChat]);
   return (

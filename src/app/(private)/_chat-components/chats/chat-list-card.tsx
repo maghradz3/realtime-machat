@@ -12,7 +12,7 @@ interface ChatListCardProps {
 
 const ChatListCard = ({ chat }: ChatListCardProps) => {
   const dispatch = useDispatch();
-  const { currentUserData }: UserState = useSelector(
+  const { currentUserData, onlineUsers }: UserState = useSelector(
     (state: any) => state.user
   );
   const { selectedChat }: ChatState = useSelector((state: any) => state.chat);
@@ -59,6 +59,17 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
     );
   };
 
+  const onlineIndicator = () => {
+    if (chat.isGroupChat) return null;
+    const recipientId = chat.users.find(
+      (user) => user._id !== currentUserData?._id!
+    )?._id;
+    console.log(recipientId, onlineUsers);
+    if (onlineUsers?.includes(recipientId!)) {
+      return <div className="w-3 h-3 rounded-full bg-green-700 "></div>;
+    }
+  };
+
   return (
     <div
       className={`flex  justify-between  hover:bg-gray-100 transition-all duration-300 easy-in-out cursor-pointer  py-3 px-2 rounded ${
@@ -72,8 +83,12 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
           alt="chatImage"
           className="w-10 h-10 rounded-full"
         />
+
         <div className="flex flex-col gap-1">
-          <span className="text-gray-700 text-sm">{chatName}</span>
+          <span className="text-gray-700 text-sm relative flex gap-2 items-center">
+            {chatName}
+            {onlineIndicator()}
+          </span>
           <span className="text-xs text-gray-500">
             {lastMessageSenderName}: {lastMessage}
           </span>

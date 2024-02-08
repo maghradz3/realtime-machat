@@ -11,6 +11,7 @@ import { SetCurrentUser, UserState } from "@/redux/userSlice";
 import { uploadImageToFireBaseAndGetUrl } from "@/helpers/image-upload";
 import { UpdateUserProfile } from "@/server-actions/users";
 import toast from "react-hot-toast";
+import socket from "@/config/socket-config";
 
 interface CurrentUserInfoProps {
   setShowCurrentUserInfo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,6 +41,7 @@ const CurrentUserInfo = ({
   const onLogout = async () => {
     try {
       setLoading(true);
+      socket.emit("logout", currentUserData?._id);
       await signOut();
       setShowCurrentUserInfo(false);
 

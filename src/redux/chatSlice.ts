@@ -17,8 +17,7 @@ const chatSlice = createSlice({
   },
 });
 
-export const { SetChats } = chatSlice.actions;
-export const { SetSelectedChat } = chatSlice.actions;
+export const { SetChats, SetSelectedChat } = chatSlice.actions;
 export default chatSlice;
 
 export interface ChatState {
