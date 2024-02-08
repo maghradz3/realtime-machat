@@ -21,9 +21,18 @@ function Message({ message }: MessagePropsType) {
     return (
       <div className="flex justify-end gap-1">
         <div className="flex flex-col gap-1">
-          <p className="bg-primary text-white p-2 px-5 rounded-xl rounded-tl-none rounded-br-none m-0">
-            {message.text}
-          </p>
+          {message.text && (
+            <p className="bg-primary text-white p-2 px-5 rounded-xl rounded-tl-none rounded-br-none m-0">
+              {message.text}
+            </p>
+          )}
+          {message.image && (
+            <img
+              src={message.image}
+              alt="messageImage"
+              className="w-30 h-30 lg:w-60 h-60 rounded-xl rounded-tl-none rounded-br-none object-cover object-center"
+            />
+          )}
           <span className=" text-gray-500 text-xs">
             {formatDateTime(message.createdAt)}
           </span>
@@ -48,7 +57,16 @@ function Message({ message }: MessagePropsType) {
             <p className="text-blue-500 text-xs font-semibold">
               {message.sender.name}
             </p>
-            <p className=" text-black m-0 mt-1  ">{message.text}</p>
+            {message.text && (
+              <p className=" text-black m-0 mt-1  ">{message.text}</p>
+            )}
+            {message.image && (
+              <img
+                src={message.image}
+                alt="messageImage"
+                className="w-30 h-30 lg:w-60 h-60 rounded-xl rounded-tl-none rounded-br-none object-cover object-center"
+              />
+            )}
           </div>
           <span className=" text-gray-500 text-xs">
             {formatDateTime(message.createdAt)}
