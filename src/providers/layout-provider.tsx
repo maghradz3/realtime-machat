@@ -1,3 +1,4 @@
+import Loader from "@/components/loader";
 import Content from "./layout-components/content";
 import Header from "./layout-components/header";
 

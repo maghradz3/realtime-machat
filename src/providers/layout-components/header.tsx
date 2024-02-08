@@ -47,25 +47,28 @@ const Header = () => {
     }
   }, [currentUserData]);
   return (
-    <div className="bg-gray-200 w-full py-2 px-10 flex justify-between items-center border-b border-solid border-gray-300">
-      <div>
-        <h1 className="text-2xl font-bold text-primary uppercase">MaChat</h1>
+    currentUserData && (
+      <div className="bg-gray-200 w-full py-2 px-10 flex justify-between items-center border-b border-solid border-gray-300">
+        <div>
+          <h1 className="text-2xl font-bold text-primary uppercase">MaChat</h1>
+        </div>
+        <div className="flex gap-5 items-center">
+          <span className="text-sm">{currentUserData?.name}</span>
+          <Avatar
+            className="cursor-pointer"
+            src={currentUserData?.profilePic}
+            onClick={() => setShowCurrentUserInfo(true)}
+          />
+        </div>
+
+        {showCurrentUserInfo && (
+          <CurrentUserInfo
+            setShowCurrentUserInfo={setShowCurrentUserInfo}
+            showCUrrentUserInfo={showCurrentUserInfo}
+          />
+        )}
       </div>
-      <div className="flex gap-5 items-center">
-        <span className="text-sm">{currentUserData?.name}</span>
-        <Avatar
-          className="cursor-pointer"
-          src={currentUserData?.profilePic}
-          onClick={() => setShowCurrentUserInfo(true)}
-        />
-      </div>
-      {showCurrentUserInfo && (
-        <CurrentUserInfo
-          setShowCurrentUserInfo={setShowCurrentUserInfo}
-          showCUrrentUserInfo={showCurrentUserInfo}
-        />
-      )}
-    </div>
+    )
   );
 };
 

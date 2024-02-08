@@ -44,7 +44,7 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
     lastMessageTime = formatDateTime(chat.lastMessage.createdAt)!;
   }
 
-  const isSelected = selectedChat?._id === chat._id;
+  const isSelected = selectedChat?._id === chat?._id;
 
   const unreadCounts = () => {
     if (

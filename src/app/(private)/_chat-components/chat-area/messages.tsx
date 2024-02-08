@@ -42,7 +42,7 @@ function Messages() {
       chatId: selectedChat?._id!,
     });
     const newChat = chats.map((chat) => {
-      if (chat._id === selectedChat?._id) {
+      if (chat?._id === selectedChat?._id) {
         let chatData = { ...chat };
         chatData.unreadCounts = { ...chatData.unreadCounts };
         chatData.unreadCounts[currentUserData?._id!] = 0;
@@ -55,7 +55,7 @@ function Messages() {
 
   React.useEffect(() => {
     socket.on("new-message-recieved", (message: MessageType) => {
-      if (selectedChat?._id === message.chat._id) {
+      if (selectedChat?._id === message.chat?._id) {
         setMessages((prev) => {
           const isMessageAlreadyExists = prev.find(
             (msg) => msg.socketMessageId === message.socketMessageId
@@ -83,7 +83,7 @@ function Messages() {
       chatId: selectedChat?._id!,
     });
     const newChat = chats.map((chat) => {
-      if (chat._id === selectedChat?._id) {
+      if (chat?._id === selectedChat?._id) {
         let chatData = { ...chat };
         chatData.unreadCounts = { ...chatData.unreadCounts };
         chatData.unreadCounts[currentUserData?._id!] = 0;

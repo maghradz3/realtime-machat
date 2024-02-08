@@ -1,5 +1,6 @@
 "use client";
 
+import Loader from "@/components/loader";
 import { UserState } from "@/redux/userSlice";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -14,7 +15,12 @@ const Content = ({ children }: { children: React.ReactNode }) => {
     pathName.includes("sign-in") || pathName.includes("sign-up");
   if (isPublicRoute) return children;
 
-  if (!currentUserData) return <div>Loading...</div>;
+  if (!currentUserData)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
 
   return <div>{children}</div>;
 };

@@ -25,7 +25,7 @@ const ChatsList = () => {
     try {
       setLoading(true);
       const response = await getAllChats(currentUserData?._id!);
-      console.log(response);
+
       if (response.error) throw new Error(response.error);
       dispatch(SetChats(response));
     } catch (error: any) {
