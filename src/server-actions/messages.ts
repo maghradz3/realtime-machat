@@ -33,6 +33,7 @@ export const SendNewMessage = async (payload: {
     await chatModel.findByIdAndUpdate(payload.chat, {
       lastMessage: newMessage._id,
       unreadCounts: existingUnreadCounts,
+      lastMessageAt: new Date().toISOString(),
     });
   } catch (error: any) {
     return { error: error.message };
@@ -72,5 +73,7 @@ export const ReadAllMessages = async ({
       unreadCounts: newUnreadCounts,
     });
     return { message: "Messages marked as read" };
-  } catch (error: any) {}
+  } catch (error: any) {
+    return { error: error };
+  }
 };

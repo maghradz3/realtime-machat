@@ -32,7 +32,7 @@ export const getAllChats = async (userId: string) => {
       .populate("lastMessage")
       .populate("createdBy")
       .populate({ path: "lastMessage", populate: { path: "sender" } })
-      .sort({ updatedAt: -1 });
+      .sort({ lastMessageAt: -1 });
     return JSON.parse(JSON.stringify(users));
   } catch (error: any) {
     return { error: error.message };

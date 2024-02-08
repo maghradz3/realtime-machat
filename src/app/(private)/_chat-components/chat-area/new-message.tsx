@@ -2,10 +2,10 @@
 import socket from "@/config/socket-config";
 import { ChatState } from "@/redux/chatSlice";
 import { SendNewMessage } from "@/server-actions/messages";
-import { RootState } from "@reduxjs/toolkit/query";
+
 import { Button, Input } from "antd";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const NewMessage = () => {
@@ -24,13 +24,15 @@ const NewMessage = () => {
       const commonPayload = {
         text,
         image: "",
+        socketMessageId: dayjs().unix(),
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
       };
 
       const socketPayload = {
         ...commonPayload,
         chat: selectedChat,
         sender: currentUserData,
-        socketMessageId: dayjs().unix(),
       };
       socket.emit("send-new-message", socketPayload);
       setText("");
@@ -45,6 +47,13 @@ const NewMessage = () => {
       error(error.message);
     }
   };
+
+  useEffect(() => {
+    socket.emit("typing", {
+      chat: selectedChat,
+      senderId: currentUserData?._id!,
+    });
+  }, [selectedChat, text]);
   return (
     <div className="p-3 bg-gray-100 border-0 border-t border-solid border-gray-300 flex gap-5 items-center">
       <div>Emoji</div>

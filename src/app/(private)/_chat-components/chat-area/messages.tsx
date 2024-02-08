@@ -1,21 +1,26 @@
 "use client";
 import { MessageType } from "@/interfaces";
-import { ChatState } from "@/redux/chatSlice";
+import { ChatState, SetChats } from "@/redux/chatSlice";
 import { GetChatMessages, ReadAllMessages } from "@/server-actions/messages";
 
 import React, { use } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Message from "./message";
 import { UserState } from "@/redux/userSlice";
 import socket from "@/config/socket-config";
 
 function Messages() {
   const [messages, setMessages] = React.useState<MessageType[]>([]);
+  const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
-  const { selectedChat }: ChatState = useSelector((state: any) => state.chat);
+  const { selectedChat, chats }: ChatState = useSelector(
+    (state: any) => state.chat
+  );
   const { currentUserData }: UserState = useSelector(
     (state: any) => state.user
   );
+
+  const messagesDIvRef = React.useRef<HTMLDivElement>(null);
   const getMessages = async () => {
     try {
       setLoading(true);
@@ -36,6 +41,16 @@ function Messages() {
       userId: currentUserData?._id!,
       chatId: selectedChat?._id!,
     });
+    const newChat = chats.map((chat) => {
+      if (chat._id === selectedChat?._id) {
+        let chatData = { ...chat };
+        chatData.unreadCounts = { ...chatData.unreadCounts };
+        chatData.unreadCounts[currentUserData?._id!] = 0;
+        return chatData;
+      } else return chat;
+    });
+
+    dispatch(SetChats(newChat));
   }, [selectedChat]);
 
   React.useEffect(() => {
@@ -51,8 +66,29 @@ function Messages() {
       }
     });
   }, [selectedChat]);
+
+  React.useEffect(() => {
+    if (messagesDIvRef.current) {
+      messagesDIvRef.current.scrollTop = messagesDIvRef.current.scrollHeight;
+    }
+    ReadAllMessages({
+      userId: currentUserData?._id!,
+      chatId: selectedChat?._id!,
+    });
+    const newChat = chats.map((chat) => {
+      if (chat._id === selectedChat?._id) {
+        let chatData = { ...chat };
+        chatData.unreadCounts = { ...chatData.unreadCounts };
+        chatData.unreadCounts[currentUserData?._id!] = 0;
+        return chatData;
+      } else return chat;
+    });
+
+    dispatch(SetChats(newChat));
+  }, [messages]);
+
   return (
-    <div className="flex-1 p-3 overflow-y-scroll ">
+    <div className="flex-1 p-3 overflow-y-scroll " ref={messagesDIvRef}>
       <div className="flex flex-col gap-3">
         {messages.map((message) => {
           return <Message key={message._id} message={message} />;
