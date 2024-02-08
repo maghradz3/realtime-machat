@@ -2,7 +2,7 @@ import ChatSkeleton from "@/components/skeletons/chatSkeleton";
 import { formatDateTime } from "@/helpers/date-formats";
 import { ChatType } from "@/interfaces";
 import { ChatState, SetSelectedChat } from "@/redux/chatSlice";
-import { UserState } from "@/redux/userSlice";
+import { SetDrawer, UserState } from "@/redux/userSlice";
 import React, { Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -80,7 +80,10 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
       className={`flex  justify-between  hover:bg-gray-100 transition-all duration-300 easy-in-out cursor-pointer  py-3 px-2 rounded ${
         isSelected ? "bg-gray-100  border border-gray-300 border-solid" : ""
       }`}
-      onClick={() => dispatch(SetSelectedChat(chat))}
+      onClick={() => {
+        dispatch(SetDrawer(false));
+        dispatch(SetSelectedChat(chat));
+      }}
     >
       <div className="flex gap-5 items-center">
         <img

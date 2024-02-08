@@ -7,6 +7,7 @@ const userSlice = createSlice({
     currentUserData: null,
     currentUserId: "",
     onlineUsers: [],
+    setDrawer: false,
   },
   reducers: {
     SetCurrentUser: (state, action) => {
@@ -18,10 +19,13 @@ const userSlice = createSlice({
     SetOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
     },
+    SetDrawer: (state, action) => {
+      state.setDrawer = action.payload;
+    },
   },
 });
 
-export const { SetCurrentUser, SetCurrentUserId, SetOnlineUsers } =
+export const { SetCurrentUser, SetCurrentUserId, SetOnlineUsers, SetDrawer } =
   userSlice.actions;
 export default userSlice;
 
@@ -29,4 +33,5 @@ export interface UserState {
   currentUserData: UserType | null;
   currentUserId: string;
   onlineUsers: string[];
+  setDrawer: boolean;
 }

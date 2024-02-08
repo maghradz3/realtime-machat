@@ -5,7 +5,7 @@ import ChatDrawer from "./chat-drawer";
 
 function Chats() {
   return (
-    <div className="hidden sm:block sm:w-[450px] h-full p-3 ">
+    <div className="hidden md:block md:w-[350px] h-full p-3 ">
       <ChatHeader />
       <ChatsList />
     </div>

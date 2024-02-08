@@ -4,16 +4,21 @@ import { Button, Drawer } from "antd";
 
 import ChatHeader from "./chats-header";
 import ChatsList from "./chats-list";
+import { useDispatch, useSelector } from "react-redux";
+import { SetDrawer, UserState } from "@/redux/userSlice";
+import { set } from "mongoose";
 
 const ChatDrawer: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { setDrawer }: UserState = useSelector((state: any) => state.user);
 
   const showDrawerWindow = () => {
-    setOpen(true);
+    dispatch(SetDrawer(true));
   };
 
   const onClose = () => {
-    setOpen(false);
+    dispatch(SetDrawer(false));
   };
 
   return (
@@ -31,11 +36,11 @@ const ChatDrawer: React.FC = () => {
         title="Select User and Start Chat"
         closable={false}
         onClose={onClose}
-        open={open}
+        open={setDrawer}
       >
         <div className="relative">
           <Button
-            onClick={() => setOpen(false)}
+            onClick={() => dispatch(SetDrawer(false))}
             size="small"
             className="absolute left-1 top-[-20px]"
           >
