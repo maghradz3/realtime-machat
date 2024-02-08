@@ -36,11 +36,11 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
   }
 
   if (chat?.lastMessage) {
-    lastMessage = chat.lastMessage.text;
+    lastMessage = chat?.lastMessage?.text;
     lastMessageSenderName =
       chat.lastMessage.sender?._id === currentUserData?._id
         ? "You"
-        : chat.lastMessage.sender?.name.split(" ")[0];
+        : chat?.lastMessage?.sender?.name.split(" ")[0];
     lastMessageTime = formatDateTime(chat.lastMessage.createdAt)!;
   }
 
@@ -54,10 +54,11 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
     ) {
       return null;
     }
+
     return (
       <div>
         <span className="bg-green-700 text-white h-5 w-5 rounded-full flex justify-center items-center">
-          {chat.unreadCounts[currentUserData?._id]}
+          {chat?.unreadCounts[currentUserData?._id!]}
         </span>
       </div>
     );
@@ -68,7 +69,7 @@ const ChatListCard = ({ chat }: ChatListCardProps) => {
     const recipientId = chat.users.find(
       (user) => user._id !== currentUserData?._id!
     )?._id;
-    console.log(recipientId, onlineUsers);
+
     if (onlineUsers?.includes(recipientId!)) {
       return <div className="w-3 h-3 rounded-full bg-green-700 "></div>;
     }

@@ -18,15 +18,15 @@ export const SendNewMessage = async (payload: {
     const existingChat = await chatModel.findById(payload.chat);
     const existingUnreadCounts = existingChat?.unreadCounts;
 
-    existingChat?.users.forEach((user: any) => {
-      const userIdInString = user.toString();
+    existingChat?.users.forEach((user: ObjectId | null) => {
+      const userIdInString = user?.toString();
+      console.log(userIdInString);
       console.log(user);
-      console.log("existingUnreadCounts", existingUnreadCounts);
-      console.log("useridsting", userIdInString);
-      console.log("es ra aris ?", existingUnreadCounts[userIdInString]);
+      console.log("payoload senter", payload.sender);
+
       if (userIdInString !== payload.sender) {
-        existingUnreadCounts[userIdInString] =
-          (existingUnreadCounts[userIdInString] || 0) + 1;
+        existingUnreadCounts[userIdInString!] =
+          (existingUnreadCounts[userIdInString!] || 0) + 1;
       }
     });
 

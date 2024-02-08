@@ -20,7 +20,7 @@ export interface ChatType {
   groupImage: string;
   groupBio: string;
   admins: UserType[];
-  unreadCounts: object;
+  unreadCounts: any;
   createdAt: string;
   updatedAt: string;
 }

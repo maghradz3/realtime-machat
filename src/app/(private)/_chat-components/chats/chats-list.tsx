@@ -71,7 +71,7 @@ const ChatsList = () => {
 
       prevChats = [
         prevChats[indexOfChatToUpdate],
-        ...prevChats.filter((chat) => chat._id !== newMessage.chat._id),
+        ...prevChats.filter((chat) => chat?._id !== newMessage?.chat._id),
       ];
       dispatch(SetChats(prevChats));
     });
@@ -79,9 +79,9 @@ const ChatsList = () => {
 
   return (
     <div>
-      {chats.length > 0 && (
+      {chats?.length > 0 && (
         <div className="flex flex-col gap-5 mt-5">
-          {chats.map((chat) => {
+          {chats?.map((chat) => {
             return <ChatListCard key={chat._id} chat={chat} />;
           })}
         </div>

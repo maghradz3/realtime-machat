@@ -67,6 +67,13 @@ function Messages() {
     });
   }, [selectedChat]);
 
+  interface UnreadCounts {
+    [key: string]: number;
+  }
+  interface ChatType {
+    unreadCounts: UnreadCounts;
+  }
+
   React.useEffect(() => {
     if (messagesDIvRef.current) {
       messagesDIvRef.current.scrollTop = messagesDIvRef.current.scrollHeight;
